@@ -8,6 +8,7 @@ function WeatherParis() {
    
 
     useEffect(() => {
+        
         // Update the document title using the browser API
         async function paris(){
             const weather = await axios.get(`http://localhost:5000/weather/paris`);
@@ -15,8 +16,10 @@ function WeatherParis() {
         }
 
         paris()
+
         
-      });
+        
+      },[]);
 
     return (
       <div>

@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios').default;
 const mongoose = require('mongoose')
-const redisClient = require('redis').createClient;
-const redis = redisClient(6379, 'localhost');
+const Redis = require('redis')
+
+const redisClient = Redis.createClient()
 
 const forecastParisSchema = new mongoose.Schema({
     city: String,
     weather: String,
-    time: { type : Date, default: Date.now }
+    time: { type : Date, expires: 3600, default: Date.now }
 })
 const forecastParis = mongoose.model("ForecastParis", forecastParisSchema)
 
@@ -17,8 +18,10 @@ router.get('/sydney', (req, res) => {
     async function getWeather() {
         try {
           const city = "Sydney"
+          
           const response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.API_KEY}`);
-          console.log(response)
+          console.log('response', response)
+        //   redisClient.setex("SydneyWeather", 3600, response.data.weather[0].description)
           return res.json(response.data.weather[0].description)
         } catch (error) {
             return res.json(error)
@@ -68,17 +71,19 @@ router.get('/sydney', (req, res) => {
         try {
           const city = "Paris"
 
-          forecastParis.findOne({"city": city}, async (err, doc) => {
+          forecastParis.findOne({city: city}, async (err, doc) => {
+              console.log(doc)
             if(!doc) {
                 const response = await axios.get(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${process.env.API_KEY}`);
                 const forecast = new forecastParis({city: city, weather: response.data.list[7].weather[0].description})
                 forecast.save((err) => {
-                    if (err) return handleError(err);
+                    if (err) return err;
+                    console.log('doc saved')
                 })
-                console.log('doc saved')
+                
                 return res.json(response.data.list[7].weather[0].description)
             }
-                console.log("returning")
+                console.log("returning from db")
                 return res.json(doc)
           })
         } catch (error) {

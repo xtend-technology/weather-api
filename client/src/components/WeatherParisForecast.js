@@ -6,21 +6,27 @@ function WeatherParisForecast() {
     const [clicked, setClicked] = useState(false);
     const [weatherParisForecast, setWeatherParisForecast] = useState("");
     const onClickHandler = () => {
-        setClicked(true)
+        
         async function parisForecast(){
             const weather = await axios.get(`http://localhost:5000/weather/paris/forecast`);
             setWeatherParisForecast(weather.data)
+            setClicked(true)
             console.log(weather.data)
         }
-
-        parisForecast()
+        if(clicked){
+            setClicked(false)
+        } else {
+            parisForecast()
+        }
+        
     }
 
 
     return (
       <div>
 
-          <button onClick={onClickHandler}>Click for forecast</button>
+          
+          {clicked? <div><p>weather in Paris tomorrow is: {weatherParisForecast.weather}</p><button onClick={onClickHandler}>Hide forecast</button></div>: <button onClick={onClickHandler}>Click for forecast</button>}
       </div>
     );
   }

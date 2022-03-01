@@ -8,14 +8,17 @@ function Timediff() {
 
     useEffect(() => {
         // Update the document title using the browser API
+        
         async function timeDiff(){
             const timeDiff= await axios.get(`http://localhost:5000/weather/time-diff`);
             setTimeDiff(timeDiff.data)
         }
 
         timeDiff()
+
         
-      });
+        
+      },[]);
 
     return (
       <div>
