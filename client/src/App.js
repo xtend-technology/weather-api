@@ -1,6 +1,7 @@
 import './App.css';
 import WeatherSydney from './components/WeatherSydney'
 import WeatherParis from './components/WeatherParis'
+import WeatherParisForecast from './components/WeatherParisForecast'
 import Timediff from './components/TimeDiff'
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
         hello
         <WeatherSydney />
         <WeatherParis />
+        <WeatherParisForecast />
         <Timediff />
     </div>
   );

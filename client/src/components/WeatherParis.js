@@ -5,10 +5,7 @@ function WeatherParis() {
 
     const [clicked, setClicked] = useState(false);
     const [weatherParis, setweatherParis] = useState("");
-    const onClickHandler = () => {
-        setClicked(true)
-        console.log('Clicked')
-    }
+   
 
     useEffect(() => {
         // Update the document title using the browser API
@@ -24,7 +21,7 @@ function WeatherParis() {
     return (
       <div>
           weather in Paris today is: {weatherParis}
-          <button onClick={onClickHandler}>Click for forecast</button>
+          
       </div>
     );
   }

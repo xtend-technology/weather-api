@@ -4,15 +4,16 @@ import axios from 'axios';
 function WeatherParisForecast() {
 
     const [clicked, setClicked] = useState(false);
-    const [weatherParis, setweatherParis] = useState("");
+    const [weatherParisForecast, setWeatherParisForecast] = useState("");
     const onClickHandler = () => {
         setClicked(true)
         async function parisForecast(){
             const weather = await axios.get(`http://localhost:5000/weather/paris/forecast`);
-            setweatherParis(weather.data)
+            setWeatherParisForecast(weather.data)
+            console.log(weather.data)
         }
 
-        paris()
+        parisForecast()
     }
 
 

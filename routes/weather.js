@@ -78,6 +78,7 @@ router.get('/sydney', (req, res) => {
                 console.log('doc saved')
                 return res.json(response.data.list[7].weather[0].description)
             }
+                console.log("returning")
                 return res.json(doc)
           })
         } catch (error) {
