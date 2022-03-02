@@ -6,7 +6,9 @@ const cors = require('cors')
 const { MongoClient } = require('mongodb');
 const mongoose = require('mongoose');
 
+
 main().catch(err => console.log(err));
+
 
 async function main() {
   await mongoose.connect(`mongodb+srv://tim:${process.env.MONGO_PASS}@weather-api.fl86y.mongodb.net/weather-api?retryWrites=true&w=majority`);

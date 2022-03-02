@@ -30,7 +30,6 @@ function WeatherSydney() {
     return (
       <div>
           weather in Sydney today is: {weatherSydney}
-          <button onClick={onClickHandler}>Click for forecast</button>
       </div>
     );
   }
