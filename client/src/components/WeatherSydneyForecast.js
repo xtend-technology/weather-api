@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function WeatherSydneyForecast() {
+function WeatherSydneyForecast(props) {
 
     const [clicked, setClicked] = useState(false);
     const [weatherSydneyForecast, setWeatherSydneyForecast] = useState("");
@@ -26,7 +26,7 @@ function WeatherSydneyForecast() {
       <div>
 
           
-          {clicked? <div><p>weather in Sydney tomorrow is: {weatherSydneyForecast}</p><button onClick={onClickHandler}>Hide forecast</button></div>: <button onClick={onClickHandler}>Click for forecast</button>}
+          {clicked? <div><p>Looks like it will be {weatherSydneyForecast} in {props.city} tomorrow</p><button style={{cursor: 'pointer'}} onClick={onClickHandler}>Hide forecast</button></div>: <button style={{cursor: 'pointer'}} onClick={onClickHandler}>Click for forecast</button>}
       </div>
     );
   }

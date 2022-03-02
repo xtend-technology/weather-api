@@ -22,7 +22,7 @@ function Timediff() {
 
     return (
       <div>
-          Sydney is {timeDiff} hours ahead of Paris
+          <h5>*Sydney is {timeDiff} hours ahead of Paris</h5>
           
       </div>
     );

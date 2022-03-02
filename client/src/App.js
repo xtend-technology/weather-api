@@ -8,11 +8,11 @@ import Timediff from './components/TimeDiff'
 function App() {
   return (
     <div className="App">
-        hello
-        <WeatherSydney />
-        <WeatherSydneyForecast />
-        <WeatherParis />
-        <WeatherParisForecast />
+        <h2>Weather App</h2>
+        <WeatherSydney city="Sydney"/>
+        <WeatherSydneyForecast city="Sydney"/>
+        <WeatherParis city="Paris"/>
+        <WeatherParisForecast city="Paris"/>
         <Timediff />
     </div>
   );
