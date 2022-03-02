@@ -3,8 +3,6 @@ import axios from 'axios';
 
 
 function WeatherParis(props) {
-
-    const [clicked, setClicked] = useState(false);
     const [weatherParis, setweatherParis] = useState("");
    
 
