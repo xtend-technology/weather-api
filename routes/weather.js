@@ -13,11 +13,6 @@ const forecastSchema = new mongoose.Schema({
 })
 const Forecast = mongoose.model("Forecast", forecastSchema)
 
-router.get('/redis', async (req, res) => {
-    const client = await redis.createClient()
-    await client.connect()
-    client.set("name", "Tim")
-})
 
 router.get('/sydney', async (req, res) => {
 
