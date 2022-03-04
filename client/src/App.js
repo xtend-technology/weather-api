@@ -14,7 +14,10 @@ function App() {
         <WeatherSydneyForecast city="Sydney"/>
         <WeatherParis city="Paris"/>
         <WeatherParisForecast city="Paris"/>
-        <NewForecastDataGetter/>
+        <div style={{display:"flex", flexDirection:"row"}}>
+        <NewForecastDataGetter city="Geneva"/>
+        <NewForecastDataGetter city="Honolulu"/>
+        </div>
         <Timediff />
     </div>
   );

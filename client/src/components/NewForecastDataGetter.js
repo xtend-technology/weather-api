@@ -3,13 +3,14 @@ import axios from 'axios';
 import NewForecast from './NewForecast'
 
 
+
 function NewForecastDataGetter(props) {
     const [weather, setWeather] = useState([]);
     useEffect(() => {
         
         // Update the document title using the browser API
         async function forecast(){
-            const resp = await axios.get(`http://localhost:5000/weather/coords`);
+            const resp = await axios.get(`http://localhost:5000/weather/coords/${props.city}`);
             setWeather(resp.data.list)
         }
 
@@ -17,15 +18,15 @@ function NewForecastDataGetter(props) {
 
         
         
-      },[]);
+      },[props.city]);
    
 
       
 
     return (
-      <div>
+      <div style={{maxWidth: "50%"}}>
 
-          <NewForecast weather={weather} city="Geelong"/>
+          <NewForecast weather={weather} city={props.city}/>
           
       </div>
     );

@@ -135,8 +135,8 @@ router.get('/sydney', async (req, res) => {
     
   })
 
-  router.get('/coords', async (req, res) => {
-    const city = "Geelong"
+  router.get('/coords/:city', async (req, res) => {
+    const city = req.params.city
 
     // const getcoords = async (city) => {
         
