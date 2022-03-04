@@ -112,6 +112,7 @@ router.get('/sydney', async (req, res) => {
           const city = "Paris"
 
           Forecast.findOne({city: city}, async (err, doc) => {
+              if(err) throw new Error('Find from DB failed')
               console.log("doc is", doc)
             if(!doc) {
                 const response = await axios.get(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${process.env.API_KEY}`);
@@ -134,9 +135,46 @@ router.get('/sydney', async (req, res) => {
     
   })
 
-  router.get('/time-diff', (req, res) => {
+  router.get('/coords', async (req, res) => {
+    const city = "Geelong"
 
-    async function getTimeDiff() {
+    // const getcoords = async (city) => {
+        
+        try {
+            const coords = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${process.env.API_KEY}`)
+            const forecast = await axios.get(`http://api.openweathermap.org/data/2.5/forecast?lat=${coords.data[0].lat}&lon=${coords.data[0].lon}&units=metric&appid=${process.env.API_KEY}`)
+            return res.json(forecast.data)
+            
+        } catch (error) {
+            return res.json(error)
+        }
+
+        
+    
+    
+    // axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${process.env.API_KEY}`)
+    // .then((response) => response.data)
+    // .then((coords)=> axioapi.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}&appid={API key}coords[0].lat, coords[0].lon)
+    // .then()
+    // .catch((err)=> console.log(err))
+      
+
+  })
+
+  router.get('/localtime', async(req, res) => {
+    try {
+        const coords = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${process.env.API_KEY}`)
+        const forecast = await axios.get(`http://api.openweathermap.org/data/2.5/forecast?lat=${coords.data[0].lat}&lon=${coords.data[0].lon}&units=metric&appid=${process.env.API_KEY}`)
+        return res.json(forecast.data)
+        
+    } catch (error) {
+        return res.json(error)
+    }
+  })
+
+  router.get('/time-diff', async(req, res) => {
+
+   
         try {
             const city1 = "Paris"
             const city2 = "Sydney"
@@ -144,6 +182,7 @@ router.get('/sydney', async (req, res) => {
           let timeParis = response1.data.timezone
           const response2 = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city2}&units=metric&appid=${process.env.API_KEY}`);
           let timeSydney = response2.data.timezone
+          console.log('time sydney ', timeSydney)
           
         
           let timediff = timeSydney-timeParis
@@ -157,8 +196,7 @@ router.get('/sydney', async (req, res) => {
      catch (error) {
             return res.json(error)
         }
-      }
-      getTimeDiff()
+      
     
   })
 
