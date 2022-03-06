@@ -8,9 +8,10 @@ function WeatherParisForecast(props) {
     const onClickHandler = () => {
         
         async function parisForecast(){
+            setClicked(true)
             const weather = await axios.get(`http://localhost:5000/weather/paris/forecast`);
             setWeatherParisForecast(weather.data.weather)
-            setClicked(true)
+            
             console.log(weather.data)
         }
         if(clicked){

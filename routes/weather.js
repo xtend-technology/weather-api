@@ -172,32 +172,100 @@ router.get('/sydney', async (req, res) => {
     }
   })
 
-  router.get('/time-diff', async(req, res) => {
+//   router.get('/time-diff', async(req, res) => {
 
    
-        try {
-            const city1 = "Paris"
-            const city2 = "Sydney"
-          const response1 = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city1}&units=metric&appid=${process.env.API_KEY}`);
-          let timeParis = response1.data.timezone
-          const response2 = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city2}&units=metric&appid=${process.env.API_KEY}`);
-          let timeSydney = response2.data.timezone
-          console.log('time sydney ', timeSydney)
+//         try {
+//             const city1 = "Jakarta"
+//             const city2 = "Montreal"
+//           const response1 = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city1}&units=metric&appid=${process.env.API_KEY}`);
+//           let timeCity1= response1.data.timezone
+//           const response2 = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city2}&units=metric&appid=${process.env.API_KEY}`);
+//           let timeCity2 = response2.data.timezone
           
-        
-          let timediff = timeSydney-timeParis
-          let timediffHours = (timeSydney-timeParis)/60/60
+          
+//             if(timeCity1>timeCity2) {
+//                 let timediff = timeCity1-timeCity2
+//                 let cityAhead= city1
+//             } else {
+//                 let timediff = timeCity2-timeCity1
+//                 let cityAhead= city2
+//             }
+          
+//           let timediffHours = timeDiff/60/60
 
         
-            return res.json(timediffHours)
-          }
+//             return res.status(200).json({
+//                 "cityAhead": cityAhead,
+//                 "timediff": timediffHours
+//             })
+//           }
           
           
-     catch (error) {
-            return res.json(error)
-        }
+//      catch (error) {
+//             return res.json(error)
+//         }
       
     
-  })
+//   })
+
+  router.get('/time-diff/:city1/:city2', async(req, res) => {
+    console.log('got it', req.params.city1, req.params.city2)
+   
+    try {
+        const city1 = req.params.city1
+        const city2 = req.params.city2
+      const response1 = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city1}&units=metric&appid=${process.env.API_KEY}`);
+      let timeCity1= response1.data.timezone
+
+      console.log('time city 1', timeCity1)
+      const response2 = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city2}&units=metric&appid=${process.env.API_KEY}`);
+      let timeCity2 = response2.data.timezone
+      console.log('time city 2',timeCity2)
+      
+        if(timeCity1>timeCity2) {
+            let timediff = timeCity1-timeCity2
+            console.log('time diff',timeCity2)
+            let cityAhead= city1
+            let cityBehind= city2
+
+            let timediffHours = timediff/60/60
+        console.log("city ahead", cityAhead)
+        console.log("city behind", cityBehind)
+    
+        return res.status(200).json({
+            
+                "cityAhead": cityAhead,
+                "cityBehind": cityBehind,
+                "timeDiff": timediffHours
+            
+        })
+        } else {
+            let timediff = timeCity2-timeCity1
+            let cityAhead= city2
+            let cityBehind= city1
+
+            let timediffHours = timediff/60/60
+        console.log("city ahead", cityAhead)
+        console.log("city behind", cityBehind)
+    
+        return res.status(200).json({
+            "cityAhead": cityAhead,
+            "cityBehind": cityBehind,
+            "timeDiff": timediffHours
+        }
+        )
+        }
+      
+      
+      }
+      
+      
+ catch (error) {
+        return res.json(error)
+    }
+  
+
+})
 
   module.exports = router;

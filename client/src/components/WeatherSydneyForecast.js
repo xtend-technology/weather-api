@@ -8,9 +8,10 @@ function WeatherSydneyForecast(props) {
     const onClickHandler = () => {
         
         async function SydneyForecast(){
+            setClicked(true)
             const weather = await axios.get(`http://localhost:5000/weather/Sydney/forecast`);
             setWeatherSydneyForecast(weather.data.weather)
-            setClicked(true)
+            
             console.log(weather.data)
         }
         if(clicked){

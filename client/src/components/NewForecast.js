@@ -23,7 +23,7 @@ function NewForecast(props) {
     return (
       <div>
 
-          <h4>The forecast for {props.city} is:</h4>
+          <h4>{props.city} forecast:</h4>
           <ul>{weatherItems}</ul>
           
       </div>
