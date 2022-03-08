@@ -3,28 +3,25 @@ import axios from 'axios';
 
 function WeatherSydney(props) {
 
-    const [weatherSydney, setweatherSydney] = useState(null);
-    console.log(weatherSydney)
+    const [weatherSydney, setWeatherSydney] = useState(null);
+    
 
-    useEffect(() => {
-
-      
+    useEffect(async() => {
         
-        async function sydney(){
+          try{
             const weather = await axios.get(`http://localhost:5000/weather/sydney`);
             console.log(weather.data)
-            setweatherSydney(weather.data)
-        }
-
-        sydney()
-
-        
+            setWeatherSydney(weather.data)
+          } catch (err){
+            console.log('Get sydney weather failed', err)
+          }
+            
         
       }, []);
 
     return (
       <div>
-          <h4>The weather in {props.city} today is: {weatherSydney}</h4>
+          <h4 role="output">The weather in {props.city} today is: {weatherSydney}</h4>
       </div>
     );
   }
