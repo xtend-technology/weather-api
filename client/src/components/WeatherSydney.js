@@ -11,7 +11,7 @@ function WeatherSydney(props) {
           try{
             const weather = await axios.get(`http://localhost:5000/weather/sydney`);
             console.log(weather.data)
-            setWeatherSydney(weather.data)
+            setWeatherSydney(weather.data.description)
           } catch (err){
             console.log('Get sydney weather failed', err)
           }

@@ -11,7 +11,12 @@ main().catch(err => console.log(err));
 
 
 async function main() {
-  await mongoose.connect(`mongodb+srv://tim:${process.env.MONGO_PASS}@weather-api.fl86y.mongodb.net/weather-api?retryWrites=true&w=majority`);
+  try{
+    await mongoose.connect(`mongodb+srv://tim:${process.env.MONGO_PASS}@weather-api.fl86y.mongodb.net/weather-api?retryWrites=true&w=majority`);
+  } catch (err) {
+    throw new Error(`Mongoose couldn\'t connect ${err}`)
+  }
+  
 }
 
 app.use(cors({
@@ -26,3 +31,6 @@ app.use('/weather', require('./routes/weather'))
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+//export for testing
+module.exports = app;

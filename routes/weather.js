@@ -19,7 +19,7 @@ router.get('/sydney', async (req, res) => {
     const city = "Sydney"
 
     
-        const client = await redis.createClient()
+        const client = redis.createClient()
         await client.connect()
 
 
@@ -27,14 +27,14 @@ router.get('/sydney', async (req, res) => {
 
         const resp = await client.get("SydneyWeather")
         if(resp) {console.log(resp)
-            return res.json(JSON.parse(resp))
+            return res.status(200).json({description: JSON.parse(resp)})
         } else {
             
             const response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.API_KEY}`);
                 console.log('response', response.data.weather[0].description)
                 const send = await client.set("SydneyWeather", JSON.stringify(response.data.weather[0].description), {EX:10800})
                 client.quit()
-            return res.json(response.data.weather[0].description)
+            return res.status(200).json({description: response.data.weather[0].description})
         }
            
        
