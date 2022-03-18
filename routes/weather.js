@@ -13,38 +13,90 @@ const forecastSchema = new mongoose.Schema({
 })
 const Forecast = mongoose.model("Forecast", forecastSchema)
 
+//Sydney weather function
 
-router.get('/sydney', async (req, res) => {
-
-    const city = "Sydney"
-
-    
-        const client = redis.createClient()
+const redisGet = async () => { 
+    try{
+    const client = redis.createClient()
         await client.connect()
 
 
-        try {
-
-        const resp = await client.get("SydneyWeather")
-        if(resp) {console.log(resp)
-            return res.status(200).json({description: JSON.parse(resp)})
-        } else {
-            
-            const response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.API_KEY}`);
-                console.log('response', response.data.weather[0].description)
-                const send = await client.set("SydneyWeather", JSON.stringify(response.data.weather[0].description), {EX:10800})
-                client.quit()
-            return res.status(200).json({description: response.data.weather[0].description})
-        }
-           
-       
-        } catch (error) {
-            return res.json(error)
-        }
-      
-      
+    const resp = await client.get("SydneyWeather")
     
-  })
+        if(resp) {
+            console.log(resp)
+            const json ={}
+            json.description = resp
+            console.log('JSON object ', json)
+            return JSON.stringify(json)
+            client.quit()
+        } else {
+            console.log('No redis response')
+            const json ={}
+            json.description = "Nothing"
+            console.log('JSON object ', json)
+            return JSON.stringify(json)
+            client.quit()
+        }
+    } catch(err){
+        throw new Error(`Redis Get error: ${err}`)
+    }
+        
+
+}
+
+const weatherApiGet = async (city) => {
+    try{
+        const response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.API_KEY}`);
+        console.log('weather API response', response)
+        return JSON.stringify(response.data.weather[0].description)
+    } catch (err) {
+        // throw new Error(`Axios error: ${err}`)
+        return new Error('Sorry error')
+    }
+    
+
+}
+
+const redisSet = async (info) => {
+    
+    try{
+        const client = redis.createClient()
+        await client.connect()
+        const send = await client.set("SydneyWeather", info, {EX:10800})
+    client.quit()
+    } catch (err){
+        throw new Error(`Redis Set connection error: ${err}`)
+    }
+      
+
+}
+
+const sydneyWeather = async (req, res) => {
+
+    const city = "Sydney"
+
+    const redisGetInfo = await redisGet()
+
+    console.log('redis get info', JSON.parse(redisGetInfo))
+
+    if(JSON.parse(redisGetInfo).description !== "Nothing") {
+        return res.status(200).json(JSON.parse(redisGetInfo))
+    } else {
+        const weatherInfo = await weatherApiGet(city)
+        console.log('weather info', weatherInfo)
+        const redisSetInfo = await redisSet(JSON.parse(weatherInfo))
+        console.log("Redis set info", redisSetInfo)
+        const redisGetInfo2 = await redisGet()
+        console.log("Redis get info", redisGetInfo2)
+        return res.status(200).json(JSON.parse(redisGetInfo2))
+    }
+    
+            
+    
+  }
+
+router.get('/sydney', sydneyWeather)
 
   router.get('/sydney/forecast', async (req, res) => {
 
@@ -224,4 +276,8 @@ router.get('/sydney', async (req, res) => {
 
 })
 
-  module.exports = router;
+  module.exports = {
+    router,
+    sydneyWeather,
+    weatherApiGet
+  }

@@ -1,46 +1,46 @@
-const App = require ('../app')
-const sinon = require('sinon')
-const chai = require('chai')
-const expect = chai.expect()
-const chaiHttp = require('chai-http');
-const {mockReq, mockRes} = require('sinon-express-mock')
-const request = require('request')
+// const App = require ('../app')
+// const sinon = require('sinon')
+// const chai = require('chai')
+// const expect = chai.expect()
+// const chaiHttp = require('chai-http');
+// const {mockReq, mockRes} = require('sinon-express-mock')
+// const request = require('request')
 
-const should = chai.should();
-chai.use(chaiHttp);
+// const should = chai.should();
+// chai.use(chaiHttp);
 
-describe('Call function Sydney direct', function () {
+// describe('Call function Sydney direct', function () {
 
-      it('should call Sydney direct', (done) => {
-        chai.request(App)
-        .get('/weather/sydney')
-        .end((err, res) => {
-          res.should.have.status(200);
-          done();
-        })
+//       it('should call Sydney direct', (done) => {
+//         chai.request(App)
+//         .get('/weather/sydney')
+//         .end((err, res) => {
+//           res.should.have.status(200);
+//           done();
+//         })
         
-      });
+//       });
     
-  });
+//   });
 
-describe('Call Sydney function mock', function () {
+// describe('Call Sydney function mock', function () {
 
-      it('should call Sydney mocked', () => {
-        const request = {
-          body:{}
-        }
-        const req = mockReq(request)
-        const res = mockRes()
-        App.get('/weather/sydney', (req,res) => {
-          expect(res.json).to.be.calledWith({})
-          console.log('mocked sydney response', res)
+//       it('should call Sydney mocked', () => {
+//         const request = {
+//           body:{}
+//         }
+//         const req = mockReq(request)
+//         const res = mockRes()
+//         App.get('/weather/sydney', (req,res) => {
+//           expect(res.json).to.be.calledWith({})
+//           console.log('mocked sydney response', res)
           
-        })
+//         })
 
         
-      });
+//       });
     
-  });
+//   });
 
 //   describe('Call Sydney forecast function mock', function () {
 
@@ -69,28 +69,28 @@ describe('Call Sydney function mock', function () {
   
 // });
 
-describe('Sydney function stub', function () {
+// describe('Sydney function stub', function () {
 
   
-    before(() => {
-    sinon.stub(request, 'get').yields({description: "overcast clouds"})
-    })
-    after(() => {
-      request.get.restore();
-  });
-  it('should return Sydney forecast stubbed', () => {
-    App.get('/weather/sydney/', (req,res) => {
-      expect(res.statusCode).to.equal(201);
-        expect(res.json).to.deep.equal({
-          description: "overcast clouds1"
-        })
-      console.log('mocked sydney response', res)
+//     before(() => {
+//     sinon.stub(request, 'get').yields({description: "overcast clouds"})
+//     })
+//     after(() => {
+//       request.get.restore();
+//   });
+//   it('should return Sydney forecast stubbed', () => {
+//     App.get('/weather/sydney/', (req,res) => {
+//       expect(res.statusCode).to.equal(201);
+//         expect(res.json).to.deep.equal({
+//           description: "overcast clouds1"
+//         })
+//       console.log('mocked sydney response', res)
       
-    })
+//     })
 
     
-  });
+//   });
 
-});
+// });
 
 
